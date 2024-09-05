@@ -2,19 +2,24 @@ import java.util.Scanner;
 
 public class SimuladorCuentaBancaria {
     public static void main(String[] args) {
-        String separador;
+        String separador1;
+        String separador2;
+        String menu;
         String nombre;
         int cuenta;
-        int tipoTransaccion;
+        int opcionMenu = 0;
+        double tasa = 0.0050;
         double saldo;
         double monto;
         int numTrx;
+        boolean continuar = true;
 
-        separador = "-".repeat(100);
+        separador1 = "-".repeat(100);
+        separador2 = "-".repeat(60);
 
         Scanner sacanner = new Scanner(System.in);
 
-        System.out.println(separador);
+        System.out.println(separador1);
         System.out.println("Ingrese el Nombre:");
         nombre = sacanner.next();
 
@@ -23,65 +28,75 @@ public class SimuladorCuentaBancaria {
 
         System.out.println("Ingrese el Saldo Inicial:");
         saldo = sacanner.nextDouble();
-        System.out.println(separador);
+        System.out.println(separador1);
 
-        System.out.println("Hola " + nombre + ", tu cuenta No. " + cuenta +
-                           "\n Tienes derecho a 5 transacciones el día de hoy." +
-                           "\n Inicias con un Saldo: "+ saldo);
-        System.out.println(separador);
+        System.out.println(separador1);
 
+            System.out.println("Hola " + nombre + ", tu cuenta No. " + cuenta
+                             + "\nTu saldo Inicial es: $"+ saldo);
+        // ---------------------------------------------------------
+        while (continuar){
+            System.out.println(separador1);
+            menu =     separador2
+                    + "\nMenú Principal:\n"
+                    + "   1. Consultar Saldo\n"
+                    + "   2. Realizar Depósito\n"
+                    + "   3. Realizar Retiro\n"
+                    + "   4. Calcular Intereses\n"
+                    + "   5. Salir\n"
+                    +  separador2;
+            System.out.println(menu);
+            System.out.println("Elige una opción entre (1-5):");
+            opcionMenu = sacanner.nextInt();
 
-
-        // ------------------------------------------
-        numTrx = 0;
-        for (int i = 0; i < 5; i++) {
-            numTrx++;
-            System.out.println(separador);
-            System.out.println("   Transacción No." + numTrx);
-            System.out.println(separador);
-
-            // Asegura un Tipo de transacción valido
-            tipoTransaccion = 0;
-            while (tipoTransaccion == 0){
-                System.out.println("Elija el Tipo de Transacción (1=deposito  2=Retiro)");
-                tipoTransaccion = sacanner.nextInt();
-                // Valida que se ingrese un tipo valido de transacción
-                if (tipoTransaccion != 1 && tipoTransaccion != 2){
-                    System.out.println("\n *** *** ALERTA - Tipo de Transacción "+tipoTransaccion+
-                                       " NO es valido. *** *** \n");
-                    tipoTransaccion = 0;
-                }
-            }
-
-            monto =0;
-            switch (tipoTransaccion){
-                case 1 :
+            switch (opcionMenu) {
+                case 1:  // Consultar Saldo
+                    System.out.println("Tu saldo actual es: $" + saldo);
+                    break;
+                case 2:  // Realizar Depósito
                     System.out.println("Ingrese el Monto a Depositar: ");
                     monto = sacanner.nextDouble();
                     if (monto<=0){
-                        System.out.println("\n *** *** ALERTA -- Transacción No exitosa, " +
-                                           "El monto ingresado debe ser mayor a Cero (0). *** *** \n");
+                        System.out.println(" *** *** ALERTA -- Transacción No exitosa, " +
+                                "El monto ingresado debe ser mayor a Cero (0). *** *** ");
                         continue;
                     }
                     saldo = saldo + monto;
                     break;
-                case 2:
+                case 3:  // Realizar Retiro
                     System.out.println("Ingrese el Monto a Retirar: ");
                     monto = sacanner.nextDouble();
                     if (monto<=0){
-                        System.out.println("\n *** *** ALERTA - Transacción No exitosa, " +
-                                           "El monto ingresado debe ser mayor a Cero (0). *** *** \n");
+                        System.out.println(" *** *** ALERTA - Transacción No exitosa, " +
+                                "El monto ingresado debe ser mayor a Cero (0). *** *** ");
                         continue;
                     }
                     if (monto > saldo){
-                        System.out.println("\n *** *** ALERTA - Transacción No exitosa, " +
-                                           "Saldo Insuficiente. *** *** \n");
+                        System.out.println(" *** *** ALERTA - Transacción No exitosa, " +
+                                "Saldo Insuficiente. *** *** ");
                         continue;
                     }
                     saldo = saldo - monto;
                     break;
+                case 4:  // Calcular Intereses
+                    System.out.println("Tus intereses generados son: $" + saldo * tasa);
+                    break;
+                case 5:  // Salir
+                    System.out.println(separador2);
+                    System.out.println( nombre +  ", Gracias por usar nuestro servicio.\n¡Hasta pronto!");
+                    continuar = false;
+                    break;
+                default:
+                    System.out.println(separador2);
+                    System.out.println(  " *** *** ALERTA - La Opción de Menú " + opcionMenu
+                            + " NO es valida. *** ***");
+                    System.out.println(separador2);
+                    continuar = true;
+                    break;
             }
+            System.out.println(separador1);
         }
+        // ---------------------------------------------------------
         System.out.println("Tú Saldo final es:  $"+ saldo);
         // Cerrar el scanner al finalizar
         sacanner.close();
